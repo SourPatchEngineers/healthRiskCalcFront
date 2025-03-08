@@ -4,7 +4,8 @@
   "description": "The frontend for the health risk calculator etsttetetet",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "echo 'No build step required' > build.log",
+    "test": "echo 'No tests configured'"
   },
   "repository": {
     "type": "git",
@@ -18,4 +19,5 @@
     "url": "https://github.com/SourPatchEngineers/healthRiskCalcFront/issues"
   },
   "homepage": "https://github.com/SourPatchEngineers/healthRiskCalcFront#readme"
+  
 }
