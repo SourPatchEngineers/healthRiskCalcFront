@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Risk Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="instructions">
+            <p>This application aims to assess the risk of an insurance customer and assign them to one of several categories. Please fill out the form below and press enter.</p>
+        </div>
+        <div class="questionnaire">
+            <div class="form-group">
+                <label for="weight">Weight</label>
+                <p class="instruction">Select user weight in lbs</p>
+                <input type="number" id="weight" placeholder="lbs" min ="1">
+            </div>
+            <div class="form-group">
+                <label for="height">Height</label>
+                <p class="instruction">Select user height in feet and inches</p>
+                <div class="height-input">
+                    <select id="feet">
+                        <option value="">feet</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                    </select>
+                    <select id="inches">
+                        <option value="">inches</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <p class="instruction">Select user age</p>
+                <select id="age">
+                    <option value="">Select age</option>
+                    <script>
+                        for (let i = 1; i <= 100; i++) {
+                            document.write(`<option value="${i}">${i}</option>`);
+                        }
+                    </script>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Blood Pressure Categories</label>
+                <table>
+                    <tr>
+                        <th>Blood Pressure Category</th>
+                        <th>Systolic mm Hg (upper number)</th>
+                        <th>Diastolic mm Hg (lower number)</th>
+                    </tr>
+                    <tr>
+                        <td>NORMAL</td>
+                        <td>LESS THAN 120</td>
+                        <td>LESS THAN 80</td>
+                    </tr>
+                    <tr>
+                        <td>ELEVATED</td>
+                        <td>120-129</td>
+                        <td>LESS THAN 80</td>
+                    </tr>
+                    <tr>
+                        <td>HIGH BLOOD PRESSURE (HYPERTENSION) STAGE 1</td>
+                        <td>130-139</td>
+                        <td>80-89</td>
+                    </tr>
+                    <tr>
+                        <td>HIGH BLOOD PRESSURE (HYPERTENSION) STAGE 2</td>
+                        <td>140 OR HIGHER</td>
+                        <td>90 OR HIGHER</td>
+                    </tr>
+                    <tr>
+                        <td>HYPERTENSIVE CRISIS</td>
+                        <td>HIGHER THAN 180</td>
+                        <td>HIGHER THAN 120</td>
+                    </tr>
+                </table>
+                <select id="blood-pressure">
+                    <option value="">Select Blood Pressure Category</option>
+                    <option value="normal">Normal</option>
+                    <option value="elevated">Elevated</option>
+                    <option value="stage 1">Stage1</option>
+                    <option value="stage 2">Stage2</option>
+                    <option value="crisis">Crisis</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Family History</label>
+                <p class="instruction">Select all diseases that are in the user's family</p>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="family-history" value="diabetes"> Diabetes</label>
+                    <label><input type="checkbox" name="family-history" value="cancer"> Cancer</label>
+                    <label><input type="checkbox" name="family-history" value="alzheimer"> Alzheimer’s</label>
+                </div>   
+            </div>
+            <button id="enter-btn">Enter</button>
+        </div>
+        <div id="summary" class="summary">
+            <h2>Summary</h2>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
