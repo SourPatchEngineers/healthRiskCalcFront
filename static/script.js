@@ -17,7 +17,7 @@ document.getElementById('enter-btn').addEventListener('click', async function() 
     const inches = document.getElementById('inches').value;
     const age = document.getElementById('age').value;
     const bloodPressure = document.getElementById('blood-pressure').value;
-    const familyHistoryCheckboxes = document.querySelectorAll('input[name="family-history"]:checked');
+    const familyHistoryCheckboxes = Array.from(document.querySelectorAll('input[name="family-history"]:checked')) .map(cb => cb.value);
 
     if (!weight || isNaN(weight) || weight < 0) {
         alert('Please enter a valid weight in lbs (non-negative number).');
@@ -55,10 +55,26 @@ document.getElementById('enter-btn').addEventListener('click', async function() 
 
 // (UNTESTED) Takes the values from the client, and uses an API to send the results over to the backend
 async function sendHealthData(data) {
-    const results = await fetch(`${apiBase}/calculate-risk`, {
+    const response = await fetch(`${apiBase}/calculate-risk`, {
         method: 'POST', headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     });
 
-    return results.json();
+    const result = await response.json();
+    displayResults(result);
+}
+
+function displayResults(data) {
+    if (data.status === 'success') {
+        const summaryDiv = document.getElementById('summary');
+        summaryDiv.innerHTML = `
+            <h2>Summary</h2>
+            <p><strong>BMI:</strong> ${data.BMI} (${data.BMICategory})</p>
+            <p><strong>Final Score:</strong> ${data.finalScore}</p>
+            <p><strong>Risk Category:</strong> ${data.riskCategory}</p>
+        `;
+        summaryDiv.style.display = 'block';
+    } else {
+        alert(data.message);
+    }
 }
