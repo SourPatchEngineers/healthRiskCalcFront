@@ -10,15 +10,25 @@ async function wakeUpServer() {
         console.error('Failed to wake up server:', err);
     }
 }
-
+function clearFormFields() {
+    document.getElementById('weight').value = '';
+    document.getElementById('feet').value = '';
+    document.getElementById('inches').value = '';
+    document.getElementById('age').value = '';
+    document.getElementById('blood-pressure').value = '';
+    document.querySelectorAll('input[name="family-history"]:checked').forEach(checkbox => checkbox.checked = false);
+}
 document.getElementById('enter-btn').addEventListener('click', async function() {
-    const weight = document.getElementById('weight').value;
-    const feet = document.getElementById('feet').value;
-    const inches = document.getElementById('inches').value;
+    const weightInput = document.getElementById('weight').value;
+    const feetInput = document.getElementById('feet').value;
+    const inchesInput = document.getElementById('inches').value;
     const age = document.getElementById('age').value;
     const bloodPressure = document.getElementById('blood-pressure').value;
     const familyHistoryCheckboxes = Array.from(document.querySelectorAll('input[name="family-history"]:checked')) .map(cb => cb.value);
 
+    const weight = parseFloat(weightInput);
+    const feet = parseFloat(feetInput);
+    const inches = parseFloat(inchesInput);
     if (!weight || isNaN(weight) || weight < 0) {
         alert('Please enter a valid weight in lbs (non-negative number).');
         return false;
@@ -50,10 +60,12 @@ document.getElementById('enter-btn').addEventListener('click', async function() 
 
     // If all fields are valid, showing the summary section
     document.getElementById('summary').style.display = 'block';
+    clearFormFields();
     return true;
+    
 });
 
-// (UNTESTED) Takes the values from the client, and uses an API to send the results over to the backend
+// Takes the values from the client, and uses an API to send the results over to the backend
 async function sendHealthData(data) {
     const response = await fetch(`${apiBase}/calculate-risk`, {
         method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -67,11 +79,36 @@ async function sendHealthData(data) {
 function displayResults(data) {
     if (data.status === 'success') {
         const summaryDiv = document.getElementById('summary');
+
+        const weight = document.getElementById('weight').value;
+        const feet = document.getElementById('feet').value;
+        const inches = document.getElementById('inches').value;
+        const age = document.getElementById('age').value;
+        const bloodPressure = document.getElementById('blood-pressure').value;
+        const familyHistoryCheckboxes = Array.from(document.querySelectorAll('input[name="family-history"]:checked')).map(cb => cb.value);
+
+        const familyHistory = familyHistoryCheckboxes.length > 0 ? familyHistoryCheckboxes.join(', ') : 'No family history selected';
+
+        let riskColor = 'green'; // (low risk)
+        if (data.riskCategory === 'moderate risk') {
+            riskColor = 'darkgoldenrod'; 
+        } else if (data.riskCategory === 'high risk') {
+            riskColor = 'orange'; 
+        } else if (data.riskCategory === 'uninsurable') {
+            riskColor = 'red'; 
+        }
+
+
         summaryDiv.innerHTML = `
             <h2>Summary</h2>
+            <p><strong>Weight:</strong> ${weight} lbs</p>
+            <p><strong>Age:</strong> ${age}</p>
+            <p><strong>Height:</strong> ${feet} ft ${inches} in</p>
+            <p><strong>Blood Pressure Category:</strong> ${bloodPressure}</p>
+            <p><strong>Family History:</strong> ${familyHistory}</p>
             <p><strong>BMI:</strong> ${data.BMI} (${data.BMICategory})</p>
             <p><strong>Final Score:</strong> ${data.finalScore}</p>
-            <p><strong>Risk Category:</strong> ${data.riskCategory}</p>
+            <p><strong>Risk Category:</strong> <span style="color: ${riskColor};">${data.riskCategory}</span></p>
         `;
         summaryDiv.style.display = 'block';
     } else {
