@@ -27,18 +27,28 @@ document.getElementById('enter-btn').addEventListener('click', async function() 
     const familyHistoryCheckboxes = Array.from(document.querySelectorAll('input[name="family-history"]:checked')) .map(cb => cb.value);
 
     const weight = parseFloat(weightInput);
-    const feet = parseFloat(feetInput);
-    const inches = parseFloat(inchesInput);
+    const feet = parseFloat(feetInput, 10);
+    const inches = parseFloat(inchesInput, 10);
+
     if (!weight || isNaN(weight) || weight < 0) {
         alert('Please enter a valid weight in lbs (non-negative number).');
         return false;
     }
-
-    if (!feet || !inches) {
-        alert('Please select both feet and inches for height.');
+    if (isNaN(feet) || feet < 0) {
+        alert('Please select a valid value for feet.');
         return false;
     }
 
+    if (isNaN(inches) || inches < 0 || inches > 11) {
+        alert('Please select a valid value for inches (0-11).');
+        return false;
+    }
+
+    
+    //if (!feet || !inches) {
+    //    alert('Please select both feet and inches for height.');
+    //    return false;
+    //}
     if (!age) {
         alert('Please select an age.');
         return false;
@@ -55,6 +65,7 @@ document.getElementById('enter-btn').addEventListener('click', async function() 
         await sendHealthData({weight, feet, inches, age, bloodPressure, familyHistoryCheckboxes});
     } catch (error) {
         console.error('Failed to send health data:', error);
+        alert('An error occurred while sending data. Please try again.');
     }
 
 
