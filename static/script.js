@@ -11,6 +11,9 @@ async function wakeUpServer() {
         throw err; 
     }
 }
+document.addEventListener('DOMContentLoaded', () => {
+    wakeUpServer();
+});
 function clearFormFields() {
     document.getElementById('weight').value = '';
     document.getElementById('feet').value = '';
@@ -51,14 +54,6 @@ document.getElementById('enter-btn').addEventListener('click', async function() 
 
     if (!bloodPressure) {
         alert('Please select a blood pressure category.');
-        return false;
-    }
-    //wake up server
-    try {
-        await wakeUpServer();
-    } catch (error) {
-        console.error('Failed to wake up server:', error);
-        alert('An error occurred while waking up the server. Please try again.');
         return false;
     }
     // Calls sendHealthData(). 
