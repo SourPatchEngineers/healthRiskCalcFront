@@ -5,9 +5,10 @@ async function wakeUpServer() {
     try {
         const response = await fetch(`${apiBase}/ping`);
         const data = await response.json();
-        console.log('Server wake-up response:', data.message);
+        console.log('Server wake-up response:', data.status);
     } catch (err) {
         console.error('Failed to wake up server:', err);
+        throw err; 
     }
 }
 function clearFormFields() {
@@ -43,12 +44,6 @@ document.getElementById('enter-btn').addEventListener('click', async function() 
         alert('Please select a valid value for inches (0-11).');
         return false;
     }
-
-    
-    //if (!feet || !inches) {
-    //    alert('Please select both feet and inches for height.');
-    //    return false;
-    //}
     if (!age) {
         alert('Please select an age.');
         return false;
@@ -58,9 +53,15 @@ document.getElementById('enter-btn').addEventListener('click', async function() 
         alert('Please select a blood pressure category.');
         return false;
     }
-
-
-    // (UNTESTED) Calls sendHealthData(). 
+    //wake up server
+    try {
+        await wakeUpServer();
+    } catch (error) {
+        console.error('Failed to wake up server:', error);
+        alert('An error occurred while waking up the server. Please try again.');
+        return false;
+    }
+    // Calls sendHealthData(). 
     try {
         await sendHealthData({weight, feet, inches, age, bloodPressure, familyHistoryCheckboxes});
     } catch (error) {
